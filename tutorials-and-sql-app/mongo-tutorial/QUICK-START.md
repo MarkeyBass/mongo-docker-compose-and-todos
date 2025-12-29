@@ -10,6 +10,8 @@ docker-compose up -d
 
 # Access MongoDB shell
 docker exec -it mongodb mongosh -u admin -p password123 --authenticationDatabase admin
+# or
+docker exec -it mongodb mongosh -u admin -p password123
 
 # Access Mongo Express (Browser)
 # URL: http://localhost:8081
