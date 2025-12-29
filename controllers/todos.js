@@ -33,13 +33,11 @@ export const getTodo = async (req, res) => {
     const db = req.db;
     const todosCollection = db.collection('todos');
     
-    let objectId;
-    try {
-      objectId = new ObjectId(id);
-    } catch (error) {
+    if (!ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, data: {}, message: "Invalid id format" });
     }
-
+    
+    const objectId = ObjectId.createFromHexString(id);
     const todo = await todosCollection.findOne({ _id: objectId });
 
     if (!todo) {
@@ -60,13 +58,11 @@ export const updateTodo = async (req, res) => {
     const db = req.db;
     const todosCollection = db.collection('todos');
     
-    let objectId;
-    try {
-      objectId = new ObjectId(id);
-    } catch (error) {
+    if (!ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, data: {}, message: "Invalid id format" });
     }
-
+    
+    const objectId = ObjectId.createFromHexString(id);
     const todo = await todosCollection.findOne({ _id: objectId });
     
     if (!todo) {
@@ -116,13 +112,11 @@ export const deleteTodo = async (req, res) => {
     const db = req.db;
     const todosCollection = db.collection('todos');
     
-    let objectId;
-    try {
-      objectId = new ObjectId(id);
-    } catch (error) {
+    if (!ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, data: {}, message: "Invalid id format" });
     }
-
+    
+    const objectId = ObjectId.createFromHexString(id);
     const todo = await todosCollection.findOne({ _id: objectId });
     
     if (!todo) {

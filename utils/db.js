@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const MONGO_URL = process.env.MONGO_URL || "mongodb://admin:password123@localhost:27017/todos?authSource=admin";
+const MONGO_URL = process.env.MONGO_URL || "mongodb://admin:password123@localhost:27018/todos?authSource=admin";
 const DB_NAME = "todos";
 
 let client = null;
