@@ -127,11 +127,9 @@ Execute the MongoDB shell inside the container:
 ```bash
 docker exec -it mongodb mongosh -u admin -p password123 --authenticationDatabase admin
 ```
-
-**Alternative (if mongosh is not available, use mongo):**
-
+or 
 ```bash
-docker exec -it mongodb mongo -u admin -p password123 --authenticationDatabase admin
+docker exec -it mongodb mongosh -u admin -p password123
 ```
 
 ### Step 2: Verify Connection
@@ -144,6 +142,16 @@ Connecting to: mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&se
 Using MongoDB: 7.x.x
 Using Mongosh: x.x.x
 ```
+
+### Step 2.5: View All Databases
+
+To see all available databases:
+
+```javascript
+show dbs
+```
+
+This will display a list of all databases in your MongoDB instance.
 
 ### Step 3: Switch to a Database
 
