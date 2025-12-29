@@ -28,7 +28,7 @@ Before starting, make sure you have:
 ### Step 1: Navigate to the Project Directory
 
 ```bash
-cd mongo-and-atlas-docker-compose
+cd mongo-docker-compose-and-todos
 ```
 
 ### Step 2: Start the Services
@@ -43,8 +43,8 @@ The `-d` flag runs the containers in detached mode (in the background).
 
 **Expected Output:**
 ```
-Creating network "mongo-and-atlas-docker-compose_mongo-network" ... done
-Creating volume "mongo-and-atlas-docker-compose_mongodb_data" ... done
+Creating network "mongo-docker-compose-and-todos_mongo-network" ... done
+Creating volume "mongo-docker-compose-and-todos_mongodb_data" ... done
 Creating mongodb ... done
 Creating mongo-express ... done
 ```
