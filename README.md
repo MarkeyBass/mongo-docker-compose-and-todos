@@ -12,13 +12,14 @@ mongo-docker-compose-and-todos/
 │   └── todos.js        # Todo API endpoints
 ├── utils/               # Utility functions
 │   └── db.js           # MongoDB connection and initialization
+├── mongo-tutorial/      # Comprehensive MongoDB tutorial with guides
+│   ├── README.md        # Full MongoDB tutorial
+│   ├── QUICK-START.md   # Quick start guide
+│   └── sample-data.js   # Sample data script
+├── todos-sql-express-reference/  # SQL-based reference implementation
 ├── server.js            # Main Express application entry point
 ├── docker-compose.yml   # Docker Compose configuration for MongoDB and mongo-express
-├── package.json         # Node.js dependencies and scripts
-└── tutorials-and-sql-app/  # Tutorials and reference implementations
-    ├── express-request-study/      # Express request handling examples
-    ├── mongo-tutorial/             # MongoDB tutorial with guides
-    └── todos-sql-express-reference/  # SQL-based reference implementation
+└── package.json         # Node.js dependencies and scripts
 ```
 
 ## Main Application
@@ -100,8 +101,6 @@ The `docker-compose.yml` file sets up two services:
 
 ## Tutorials and Reference Materials
 
-The `tutorials-and-sql-app/` directory contains educational resources:
-
 ### `mongo-tutorial/`
 Comprehensive MongoDB tutorial covering:
 - Docker Compose setup
@@ -110,8 +109,7 @@ Comprehensive MongoDB tutorial covering:
 - Sample data scripts
 - Quick start guide
 
-### `express-request-study/`
-Examples and documentation for Express.js request handling patterns.
+See the [MongoDB Tutorial](mongo-tutorial/README.md) for detailed instructions.
 
 ### `todos-sql-express-reference/`
 Reference implementation of a similar todo application using SQL instead of MongoDB. Useful for comparing SQL and NoSQL approaches.
