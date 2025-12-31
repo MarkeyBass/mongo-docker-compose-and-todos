@@ -51,30 +51,29 @@ Build an Express server that manages products (stored in MongoDB) and orders (st
 
 ## Setup Instructions
 
-1. **Install dependencies:**
-```bash
-npm install
+1. **Create package.json:**
+Create a `package.json` file with `"type": "module"` to use ES modules:
+```json
+{
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  }
+}
 ```
 
-2. **Start MongoDB container:**
+2. **Install dependencies:**
 ```bash
-docker run -d --name mongodb -p 27018:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password123 mongo:latest
+npm install express nodemon dotenv mongodb mysql2
 ```
 
-3. **Start MySQL container:**
+3. **Start Docker containers:**
 ```bash
-docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=ecommerce mysql:latest
+docker-compose up -d
 ```
 
-4. **Start the server:**
-```bash
-npm start
-```
-
-For development with auto-reload:
-```bash
-npm run dev
-```
+Make sure your docker-compose.yml includes both MongoDB and MySQL services.
 
 ## Step-by-Step Implementation Order
 
@@ -121,10 +120,10 @@ Create `utils/mongodb.js` with an `initMongoDb()` function that:
 ### Step 3: Create Database Connection Functions
 
 - In `utils/mysql.js`: Create `getMysqlConnection()` function that returns MySQL connection
-- In `utils/mongodb.js`: Create `getMongoDb()` function that returns MongoDB database instance
+- In `utils/mongodb.js`: Create `getMongoDbConnection()` function that returns MongoDB database instance
 - Create Express middleware in `server.js` that attaches both connections to `req` object:
   - `req.mysqlConn` - MySQL connection
-  - `req.mongoDb` - MongoDB database
+  - `req.mongoDbConn` - MongoDB database connection
 
 ### Step 4: POST /api/products (MongoDB)
 
@@ -198,6 +197,30 @@ Delete products:
 - Response 200: Success message
 - Response 404: Product not found
 
+### Step 10: PUT /api/orders/:id (MySQL + MongoDB) - Bonus
+
+Update existing orders:
+- Route: `PUT /api/orders/:id`
+- Controller: `updateOrder` in `controllers/orders.js`
+- Body: Partial update `{ "quantity": 3, "customerName": "Jane Doe" }`
+- **Cross-database operations:**
+  - If quantity changes, recalculate `totalPrice = newQuantity * product.price`
+  - Update order in MySQL
+  - Adjust `totalOrdersCount` in MongoDB product if needed (if productId changes)
+- Response 200: Updated order
+- Response 404: Order not found or Product not found (if productId changes)
+
+### Step 11: DELETE /api/orders/:id (MySQL + MongoDB) - Bonus
+
+Delete orders:
+- Route: `DELETE /api/orders/:id`
+- Controller: `deleteOrder` in `controllers/orders.js`
+- **Cross-database operations:**
+  - Delete order from MySQL
+  - Decrement `totalOrdersCount` in MongoDB product document
+- Response 200: Success message
+- Response 404: Order not found
+
 ## Minimum Viable Completion
 
 You must complete at minimum:
@@ -260,6 +283,8 @@ This error occurs when:
 |--------|----------|-------------|----------|
 | PUT | `/api/products/:id` | Update product | MongoDB |
 | DELETE | `/api/products/:id` | Delete product | MongoDB |
+| PUT | `/api/orders/:id` | Update order | MySQL + MongoDB |
+| DELETE | `/api/orders/:id` | Delete order | MySQL + MongoDB |
 
 ## Example Requests
 
@@ -359,6 +384,8 @@ ecommerce-practice/
 
 ## Bonus Challenges (Advanced)
 
+- [ ] PUT /api/orders/:id - Update order (Step 10)
+- [ ] DELETE /api/orders/:id - Delete order (Step 11)
 - [ ] GET /api/products/:id/stats - Product statistics with order count (cross-DB aggregation)
 - [ ] Stock management: Decrement stock when order is created
 - [ ] GET /api/orders?includeProduct=true - Orders with embedded product details
