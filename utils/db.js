@@ -3,16 +3,16 @@ import { MongoClient } from "mongodb";
 const MONGO_URL = process.env.MONGO_URL || "mongodb://admin:password123@localhost:27018/todos?authSource=admin";
 const DB_NAME = "todos";
 
-let client = null;
-let db = null;
+let mongocClient = null;
+let mongoConn = null;
 
-export async function initDb() {
+export async function initMongoDb() {
   try {
-    client = new MongoClient(MONGO_URL);
-    await client.connect();
-    db = client.db(DB_NAME);
+    mongocClient = new MongoClient(MONGO_URL);
+    await mongocClient.connect();
+    mongoConn = mongocClient.db(DB_NAME);
     
-    const todosCollection = db.collection('todos');
+    const todosCollection = mongoConn.collection('todos');
     
     // Create the unique index on title
     await todosCollection.createIndex({ title: 1 }, { unique: true });
@@ -25,21 +25,21 @@ export async function initDb() {
 }
 
 export async function getDb() {
-  if (!db) {
-    if (!client) {
-      client = new MongoClient(MONGO_URL);
-      await client.connect();
+  if (!mongoConn) {
+    if (!mongocClient) {
+      mongocClient = new MongoClient(MONGO_URL);
+      await mongocClient.connect();
     }
-    db = client.db(DB_NAME);
+    mongoConn = mongocClient.db(DB_NAME);
   }
-  return db;
+  return mongoConn;
 }
 
 export async function closeConnection() {
-  if (client) {
-    await client.close();
-    client = null;
-    db = null;
+  if (mongocClient) {
+    await mongocClient.close();
+    mongocClient = null;
+    mongoConn = null;
   }
 }
 

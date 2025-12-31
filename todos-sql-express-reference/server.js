@@ -11,7 +11,7 @@ app.use(express.json());
 
 // Attaches db connection to req object
 app.use(async (req, res, next) => {
-  req.dbConn = await getConn();
+  req.mongoConnConn = await getConn();
   next();
 });
 

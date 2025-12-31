@@ -17,9 +17,9 @@ export const getTodos = async (req, res) => {
     // const isCompleted = completed === "true" ? true : completed === "false" ? false : undefined;
 
     if (completed !== undefined) {
-      results = await req.dbConn.query("SELECT * FROM todos WHERE completed = ?;", isCompleted);
+      results = await req.mongoConnConn.query("SELECT * FROM todos WHERE completed = ?;", isCompleted);
     } else {
-      results = await req.dbConn.query("SELECT * FROM todos;");
+      results = await req.mongoConnConn.query("SELECT * FROM todos;");
     }
 
     const todosArr = results[0];
@@ -38,7 +38,7 @@ export const getTodo = async (req, res) => {
     const intId = parseInt(id);
     if (isNaN(intId)) throw new Error("Invalid id, please use an integer.");
 
-    const results = await req.dbConn.query("SELECT * FROM todos WHERE id = ?", [intId]);
+    const results = await req.mongoConnConn.query("SELECT * FROM todos WHERE id = ?", [intId]);
     const todo = results[0][0];
 
     if (!todo) {
@@ -59,7 +59,7 @@ export const updateTodo = async (req, res) => {
     const intId = parseInt(id);
     if (isNaN(intId)) throw new Error("Invalid id, please use an integer.");
 
-    const results = await req.dbConn.query("SELECT * FROM todos WHERE id = ?", [intId]);
+    const results = await req.mongoConnConn.query("SELECT * FROM todos WHERE id = ?", [intId]);
     const todo = results[0][0];
     if (!todo) {
       res
@@ -97,8 +97,8 @@ export const updateTodo = async (req, res) => {
       const updateQuery = `UPDATE todos SET ${updateQueryArr.join(", ")} WHERE id = ?`;
       sqlQueryParams.push(intId);
 
-      await req.dbConn.query(updateQuery, sqlQueryParams);
-      const updatedResults = await req.dbConn.query("SELECT * FROM todos WHERE id = ?", [intId]);
+      await req.mongoConnConn.query(updateQuery, sqlQueryParams);
+      const updatedResults = await req.mongoConnConn.query("SELECT * FROM todos WHERE id = ?", [intId]);
       const updatedTodo = updatedResults[0][0];
       res.status(200).json({ success: true, data: updatedTodo });
     }
@@ -113,12 +113,12 @@ export const deleteTodo = async (req, res) => {
     const { id } = req.params;
     const intId = parseInt(id);
     if (isNaN(intId)) throw new Error("Invalid id, please use an integer.");
-    const results = await req.dbConn.query("SELECT * FROM todos WHERE id = ?", [intId]);
+    const results = await req.mongoConnConn.query("SELECT * FROM todos WHERE id = ?", [intId]);
     const todo = results[0][0];
     if (!todo) {
       res.status(404).json({ success: false, data: {}, message: `Todo with id ${id} not found` });
     } else {
-      const resultsDel = await req.dbConn.query("DELETE FROM todos WHERE id = ?", [intId]);
+      const resultsDel = await req.mongoConnConn.query("DELETE FROM todos WHERE id = ?", [intId]);
       res.status(200).json({ success: true, data: {} });
     }
   } catch (error) {
@@ -141,7 +141,7 @@ export const createTodo = async (req, res) => {
       updated_at: now,
     };
 
-    const result = await req.dbConn.query(
+    const result = await req.mongoConnConn.query(
       "INSERT INTO todos (title, description, completed, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
       [
         newTodo.title,
@@ -152,7 +152,7 @@ export const createTodo = async (req, res) => {
       ]
     );
 
-    const todo = await req.dbConn.query("SELECT * FROM todos WHERE id = ?", [result[0].insertId]);
+    const todo = await req.mongoConnConn.query("SELECT * FROM todos WHERE id = ?", [result[0].insertId]);
     res.status(201).json({ msg: "success", data: todo[0] });
   } catch (err) {
     console.error(err);
