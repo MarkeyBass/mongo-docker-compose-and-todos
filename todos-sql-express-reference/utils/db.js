@@ -35,7 +35,7 @@ let conn = null;
 export async function getConn() {
   if (conn) return conn;
   else {
-    const conn = await mysql.createConnection({
+    conn = await mysql.createConnection({
       host: "localhost",
       user: "root",
       password: "root",
