@@ -3,14 +3,14 @@ import { MongoClient } from "mongodb";
 const MONGO_URL = process.env.MONGO_URL || "mongodb://admin:password123@localhost:27018/todos?authSource=admin";
 const DB_NAME = "todos";
 
-let client = null;
+let mongocClient = null;
 let mongoConn = null;
 
-export async function initDb() {
+export async function initMongoDb() {
   try {
-    client = new MongoClient(MONGO_URL);
-    await client.connect();
-    mongoConn = client.db(DB_NAME);
+    mongocClient = new MongoClient(MONGO_URL);
+    await mongocClient.connect();
+    mongoConn = mongocClient.db(DB_NAME);
     
     const todosCollection = mongoConn.collection('todos');
     
@@ -26,20 +26,20 @@ export async function initDb() {
 
 export async function getDb() {
   if (!mongoConn) {
-    if (!client) {
-      client = new MongoClient(MONGO_URL);
-      await client.connect();
+    if (!mongocClient) {
+      mongocClient = new MongoClient(MONGO_URL);
+      await mongocClient.connect();
     }
-    mongoConn = client.db(DB_NAME);
+    mongoConn = mongocClient.db(DB_NAME);
   }
   return mongoConn;
 }
 
 export async function closeConnection() {
-  if (client) {
-    await client.close();
-    client = null;
-    db = null;
+  if (mongocClient) {
+    await mongocClient.close();
+    mongocClient = null;
+    mongoConn = null;
   }
 }
 

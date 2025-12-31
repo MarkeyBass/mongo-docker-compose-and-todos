@@ -4,7 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 import todos from "./routes/todos.js";
-import { getDb, initDb } from "./utils/db.js";
+import { getDb, initMongoDb } from "./utils/db.js";
 
 // Body parser
 app.use(express.json());
@@ -32,7 +32,7 @@ app.get("/", async (req, res) => {
 app.use("/todos", todos);
 
 app.listen(PORT, async () => {
-  await initDb();
+  await initMongoDb();
   console.log(`Server is running on port ${PORT}...`);
 });
 
