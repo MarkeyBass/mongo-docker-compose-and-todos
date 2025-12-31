@@ -2,6 +2,7 @@ import { MongoClient } from "mongodb";
 
 const MONGO_URL = process.env.MONGO_URL || "mongodb://admin:password123@localhost:27018/todos?authSource=admin";
 const DB_NAME = "todos";
+const COLLECTION_NAME = "todos"
 
 let mongocClient = null;
 let mongoConn = null;
@@ -12,7 +13,7 @@ export async function initMongoDb() {
     await mongocClient.connect();
     mongoConn = mongocClient.db(DB_NAME);
     
-    const todosCollection = mongoConn.collection('todos');
+    const todosCollection = mongoConn.collection(COLLECTION_NAME);
     
     // Create the unique index on title
     await todosCollection.createIndex({ title: 1 }, { unique: true });
