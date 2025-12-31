@@ -4,15 +4,15 @@ const MONGO_URL = process.env.MONGO_URL || "mongodb://admin:password123@localhos
 const DB_NAME = "todos";
 
 let client = null;
-let db = null;
+let mongoConn = null;
 
 export async function initDb() {
   try {
     client = new MongoClient(MONGO_URL);
     await client.connect();
-    db = client.db(DB_NAME);
+    mongoConn = client.db(DB_NAME);
     
-    const todosCollection = db.collection('todos');
+    const todosCollection = mongoConn.collection('todos');
     
     // Create the unique index on title
     await todosCollection.createIndex({ title: 1 }, { unique: true });
@@ -25,14 +25,14 @@ export async function initDb() {
 }
 
 export async function getDb() {
-  if (!db) {
+  if (!mongoConn) {
     if (!client) {
       client = new MongoClient(MONGO_URL);
       await client.connect();
     }
-    db = client.db(DB_NAME);
+    mongoConn = client.db(DB_NAME);
   }
-  return db;
+  return mongoConn;
 }
 
 export async function closeConnection() {
