@@ -22,10 +22,12 @@ export async function initMongoDb() {
   } catch (error) {
     console.error("Error initializing database:", error);
     throw error;
+  } finally {
+    await closeConnection();
   }
 }
 
-export async function getDb() {
+export async function getMongoDb() {
   if (!mongoConn) {
     if (!mongocClient) {
       mongocClient = new MongoClient(MONGO_URL);

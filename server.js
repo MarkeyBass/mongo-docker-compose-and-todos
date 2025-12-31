@@ -4,14 +4,14 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 import todos from "./routes/todos.js";
-import { getDb, initMongoDb } from "./utils/db.js";
+import { getMongoDb, initMongoDb } from "./utils/db.js";
 
 // Body parser
 app.use(express.json());
 
 // Attaches db connection to req object
 app.use(async (req, res, next) => {
-  req.mongoConn = await getDb();
+  req.mongoConn = await getMongoDb();
   next();
 });
 
